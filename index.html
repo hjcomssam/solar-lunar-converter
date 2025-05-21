@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>양력 ↔ 음력 변환기</title>
+  <script src="https://cdn.jsdelivr.net/npm/solarlunar/lib/index.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 50px; }
+    input, button { padding: 10px; font-size: 16px; margin: 10px 0; }
+    .result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h2>📅 양력 ↔ 음력 변환기</h2>
+
+<!-- 양력 → 음력 -->
+<div>
+  <label for="solarDate">양력 날짜 선택:</label><br>
+  <input type="date" id="solarDate" />
+  <button onclick="convertSolarToLunar()">양력→음력</button>
+</div>
+<div class="result" id="lunarResult"></div>
+
+<hr/>
+
+<!-- 음력 → 양력 -->
+<div>
+  <label>음력 입력:</label><br>
+  <input type="number" id="lunarYear" placeholder="연도">
+  <input type="number" id="lunarMonth" placeholder="월">
+  <input type="number" id="lunarDay" placeholder="일">
+  <button onclick="convertLunarToSolar()">음력→양력</button>
+</div>
+<div class="result" id="solarResult"></div>
+
+<script>
+function convertSolarToLunar() {
+  const date = document.getElementById('solarDate').value;
+  if (!date) return alert('날짜를 선택해주세요!');
+  const [y, m, d] = date.split('-').map(Number);
+  const lunar = solarlunar.solar2lunar(y, m, d);
+  document.getElementById('lunarResult').innerHTML =
+    `음력: ${lunar.lYear}년 ${lunar.lMonth}월 ${lunar.lDay}일${lunar.isLeap ? ' (윤달)' : ''}`;
+}
+
+function convertLunarToSolar() {
+  const y = parseInt(document.getElementById('lunarYear').value);
+  const m = parseInt(document.getElementById('lunarMonth').value);
+  const d = parseInt(document.getElementById('lunarDay').value);
+  if (!y || !m || !d) return alert('음력 날짜를 모두 입력해주세요!');
+  const solar = solarlunar.lunar2solar(y, m, d);
+  document.getElementById('solarResult').innerHTML =
+    `양력: ${solar.cYear}년 ${solar.cMonth}월 ${solar.cDay}일`;
+}
+</script>
+
+</body>
+</html>
